@@ -1,0 +1,8 @@
+{
+  "name": "acme-hue",
+  "version": "0.0.1",
+  "dependencies": {
+    "huejay": "^1.2.2",
+    "yargs": "^5.0.0"
+  }
+}

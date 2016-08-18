@@ -1,0 +1,1 @@
+* Create a *config.json* file in the root of the project based on *example.config.json*

@@ -2,7 +2,15 @@
   "name": "acme-hue",
   "version": "0.0.1",
   "dependencies": {
+    "@types/node": "^6.0.46",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
     "huejay": "^1.2.2",
+    "nunjucks": "^2.5.2",
+    "parse-color": "^1.0.0",
     "yargs": "^5.0.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.4"
   }
 }

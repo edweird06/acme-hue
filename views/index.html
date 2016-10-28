@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hue Lights</title>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+</head>
+<body>
+    <ul>
+        {% asyncEach light in allLightsData %}
+            <li><a href="/lights/{{ light.attributes.attributes.name }}">{{ light.attributes.attributes.name }}</a> is on: {{ light.state.attributes.on }}</li>
+        {% endeach %}
+    </ul>
+    <br>
+    <input type="text" id="slackMessage" style="width:500px;">
+    <button id="sendMessage">Send</button>
+    <hr>
+    <h3>Data about lights...</h3>
+    <textarea style="margin: 0px; width: 100%; height: 800px;">
+        {{ allLightsString }}
+    </textarea>
+    <script>
+        function submit() {
+			console.log('click');
+			$.ajax({
+				type:"POST",
+				url: window.location.href + 'slack',
+				dataType: 'json',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: JSON.stringify({
+					name: 'index.html',
+                    text: $('#slackMessage')[0].value || ''
+				})
+			});
+		}
+        $('#sendMessage').click(submit);
+    </script>
+</body>
+</html>

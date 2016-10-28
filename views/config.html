@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<link rel="stylesheet" href="/css/colorpicker.css" type="text/css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="/css/layout.css" />
+    <title>ColorPicker - jQuery plugin</title>
+	<script type="text/javascript" src="/js/jquery.js"></script>
+	<script type="text/javascript" src="/js/colorpicker.js"></script>
+    <script type="text/javascript" src="/js/eye.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/layout.js?ver=1.0.2"></script>
+</head>
+<body>
+    <div class="wrapper">
+		<a href="/">< Back ></a><br>
+        <h1 id="mainHeader">Color Picker - jQuery plugin</h1>
+		<div id="colorpickerHolder">
+		</div>
+		<br>
+		<lable><input type="checkbox" id="lightOn">Light On</lable><br>
+		<br>
+		<button id="submit">Submit</button>
+    </div>
+	<script>
+		{% if myLight %}
+		var myLight = {{ myLight | dump | safe }};
+		var colorPicker = $('#colorpickerHolder');
+		var name = myLight.attributes.attributes.name;
+		$(document).ready(function () {
+			// set color based on the current color set on the light
+			colorPicker.ColorPickerSetColor({
+				h: Math.round(myLight.state.attributes.hue / (65535 / 360)),
+				s: Math.round(myLight.state.attributes.sat / (255 / 100)),
+				b: Math.round(myLight.state.attributes.bri / (255 / 100)),
+			});
+			$('#lightOn')[0].checked = myLight.state.attributes.on;
+		});
+		{% else %}
+		alert('No light found by this name?');
+		{% endif %}
+
+		console.log('myLight', JSON.stringify(myLight));
+		$('#mainHeader').text('Config page for: ' + name);
+		$('#submit').click(function () {
+			console.log('click');
+			$.ajax({
+				type:"POST",
+				url: window.location.href,
+				dataType: 'json',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: JSON.stringify({
+					on: $('#lightOn')[0].checked,
+					//preset: 'bright',
+					color: {
+						hue: Math.round(parseInt($('.colorpicker_hsb_h.colorpicker_field>input')[0].value) / 360 * 65535),
+						saturation: Math.round(parseInt($('.colorpicker_hsb_s.colorpicker_field>input')[0].value) / 100 * 255),
+						brightness: Math.round(parseInt($('.colorpicker_hsb_b.colorpicker_field>input')[0].value)  / 100 * 255)
+					}
+				})
+			});
+		});
+	</script>
+</body>
+</html>
